@@ -619,6 +619,23 @@ html.mobile-reader .reader-toggle { position: fixed; bottom: 1vh; right: 2vw; z-
 html.mobile-reader .reader-toggle:hover { opacity: 1 }
 .reader-toggle { display: none }
 
+
+/* mobile-overlay v1 — Codex consult 5ac1020f 採納 D1 */
+html.mobile-reader.overlay-shown { overflow: hidden !important; height: 100% !important }
+.deck-mobile-overlay { position: fixed; inset: 0; z-index: 99999; display: none; flex-direction: column; align-items: center; justify-content: center; padding: 8vw 6vw; gap: 4vh; background: rgba(0,0,0,.92); backdrop-filter: blur(20px); color: #f1efea; font-family: var(--sans-zh, "Noto Sans SC", sans-serif); text-align: center; -webkit-font-smoothing: antialiased }
+html.mobile-reader.overlay-shown .deck-mobile-overlay { display: flex }
+.deck-mobile-overlay .o-kicker { font-family: var(--mono, monospace); font-size: 11px; letter-spacing: .26em; text-transform: uppercase; opacity: .55 }
+.deck-mobile-overlay h2 { font-family: var(--serif-zh, "Noto Serif SC", serif); font-weight: 700; font-size: clamp(22px, 7vw, 32px); line-height: 1.4; max-width: 22ch; margin: 0 }
+.deck-mobile-overlay h2 em { font-style: italic; opacity: 1; color: #ffd07a }
+.deck-mobile-overlay .o-sub { font-family: var(--serif-zh, "Noto Serif SC", serif); font-size: clamp(15px, 4.2vw, 18px); line-height: 1.7; opacity: .82; max-width: 28ch }
+.deck-mobile-overlay .o-cta { display: flex; flex-direction: column; gap: 1.4vh; width: min(360px, 86vw); margin-top: 2vh }
+.deck-mobile-overlay .o-btn { display: block; padding: 16px 24px; border-radius: 12px; font-family: var(--mono, monospace); font-size: 13px; letter-spacing: .12em; text-transform: uppercase; text-decoration: none; transition: all .2s; cursor: pointer; border: none; -webkit-tap-highlight-color: transparent }
+.deck-mobile-overlay .o-btn-primary { background: #f1efea; color: #1a1a1a; font-weight: 700 }
+.deck-mobile-overlay .o-btn-primary:active { transform: scale(.98); background: #fff }
+.deck-mobile-overlay .o-btn-primary[disabled] { opacity: .35; cursor: not-allowed }
+.deck-mobile-overlay .o-btn-secondary { background: transparent; color: rgba(241,239,234,.75); border: 1px solid rgba(241,239,234,.32) }
+.deck-mobile-overlay .o-btn-secondary:active { background: rgba(255,255,255,.08) }
+.deck-mobile-overlay .o-foot { font-family: var(--mono, monospace); font-size: 10px; letter-spacing: .2em; text-transform: uppercase; opacity: .35; margin-top: auto; padding-top: 4vh }
 </style>
 </head>
 <body>
@@ -1754,5 +1771,49 @@ if(motion){
 })();
 </script>
 
+<!-- mobile-overlay v1 (D1) -->
+<div class="deck-mobile-overlay" role="dialog" aria-modal="true" aria-labelledby="dmo-title">
+  <div class="o-kicker">手機提醒 · A NOTE FOR MOBILE</div>
+  <h2 id="dmo-title">這份簡報為<em>現場投影</em>設計，<br>手機建議閱讀講義</h2>
+  <div class="o-sub">講師簡報集是給投影/桌機觀看的形式。手機觀看時排版會被壓縮、互動受限。建議改開講義頁取得最佳閱讀體驗。</div>
+  <div class="o-cta">
+    <a class="o-btn o-btn-primary" id="dmo-handout" href="#">📖 開啟講義</a>
+    <button class="o-btn o-btn-secondary" id="dmo-summary">仍要看簡報摘要</button>
+  </div>
+  <div class="o-foot">弄一下工作室 · Lecturer Decks</div>
+</div>
+
+<script>
+/* mobile-overlay v1 — D1 採納 Codex consult 5ac1020f */
+(function(){
+  if (new URL(location.href).searchParams.get('summary') === '1') return;
+  if (sessionStorage.getItem('dmo-dismissed') === '1') return;
+  function show(){
+    if (!document.documentElement.classList.contains('mobile-reader')) return;
+    var overlay = document.querySelector('.deck-mobile-overlay');
+    if (!overlay) return;
+    /* 抽第一個 chrome-link href 當講義 CTA */
+    var firstLink = document.querySelector('.chrome-link');
+    var btn = overlay.querySelector('#dmo-handout');
+    if (firstLink && firstLink.href) {
+      btn.href = firstLink.href;
+    } else {
+      btn.setAttribute('disabled', '');
+      btn.style.pointerEvents = 'none';
+      btn.textContent = '此 deck 無對應講義';
+    }
+    overlay.querySelector('#dmo-summary').addEventListener('click', function(){
+      sessionStorage.setItem('dmo-dismissed', '1');
+      document.documentElement.classList.remove('overlay-shown');
+    });
+    document.documentElement.classList.add('overlay-shown');
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', show);
+  } else {
+    setTimeout(show, 100); /* 等 mobile-reader class apply */
+  }
+})();
+</script>
 </body>
 </html>
