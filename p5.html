@@ -568,7 +568,7 @@
 
 
 
-/* mobile-reader-mode v6 — Codex consult 0e6bc391 採納 */
+/* mobile-reader-mode v7.1 — Codex consult 0e6bc391+d4a34d90 採納（v6.5/v6.6/v6.7+v7 收口）*/
 html.mobile-reader, html.mobile-reader body { overflow: auto !important; height: auto !important }
 html.mobile-reader #deck { width: 100% !important; transform: none !important; display: block !important; height: auto !important; flex-direction: column !important; position: static !important; inset: auto !important }
 html.mobile-reader .slide { width: 100% !important; height: auto !important; min-height: auto !important; flex: 0 0 auto !important; padding: 6vw 6vw 8vw 6vw !important; overflow: visible !important; margin-bottom: 4vw; position: relative }
@@ -1926,7 +1926,7 @@ if(motion){
   var url = new URL(window.location.href);
   var force = url.searchParams.get('deck'); /* '1' = 強制桌機 deck mode */
   if (force === '1') return;
-  var mq = window.matchMedia('(max-width: 768px), (max-height: 600px) and (orientation: landscape)');
+  var mq = window.matchMedia('(max-width: 768px), (max-width: 1400px) and (max-height: 600px) and (orientation: landscape)');
   function apply(){
     if (mq.matches) {
       document.documentElement.classList.add('mobile-reader');
@@ -1953,6 +1953,16 @@ if(motion){
   }
   apply();
   mq.addEventListener ? mq.addEventListener('change', apply) : mq.addListener(apply);
+  // v7.0 Codex 修：reader mode 下 guard touch swipe + 暫停 WebGL loop
+  Object.defineProperty(window, '__readerActive', { get: function(){ return document.documentElement.classList.contains('mobile-reader'); } });
+  ['touchstart','touchend','wheel'].forEach(function(ev){
+    window.addEventListener(ev, function(e){ if(window.__readerActive) e.stopImmediatePropagation(); }, {capture:true, passive:true});
+  });
+  // 暫停 WebGL requestAnimationFrame loop（避免 reader mode 浪費 GPU）
+  if (window.__readerActive) {
+    var origRAF = window.requestAnimationFrame;
+    window.requestAnimationFrame = function(cb){ if (!window.__readerActive) return origRAF(cb); /* skip in reader */ };
+  }
 })();
 </script>
 
