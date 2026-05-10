@@ -15,7 +15,7 @@ em{font-family:var(--serif-en),var(--serif-zh);font-style:italic;font-weight:inh
 footer{padding:6vh 6vw;display:flex;justify-content:space-between;align-items:baseline;gap:2vh;flex-wrap:wrap;font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;opacity:.55}
 @media(max-width:900px){.stats{grid-template-columns:repeat(2,1fr);gap:4vh 4vw}.grid{grid-template-columns:1fr}.hero h1{font-size:13vw}.hero .sub{font-size:5.5vw}}
 
-/* landscape-mobile-fix v4 */
+/* landscape-mobile-fix v5 */
 @media (max-height:900px) and (orientation:landscape) {
   .slide { padding: 1vh 3.5vw 1.4vh 3.5vw !important }
   .frame { gap: .5vh !important }
@@ -63,6 +63,12 @@ footer{padding:6vh 6vw;display:flex;justify-content:space-between;align-items:ba
   /* 內容若仍超出，允許在 frame 內向下捲動（橫向滑頁不受影響） */
   .slide { overflow-y: auto !important; -webkit-overflow-scrolling: touch }
   .frame { overflow: visible !important; min-height: auto !important }
+
+  /* 修頂部空白：landscape 時 frame 內容從上而下排列（覆蓋 inline align-content:center） */
+  .frame { align-content: flex-start !important; align-items: flex-start !important; justify-content: flex-start !important; min-height: 0 !important; padding-top: 0 !important }
+  .frame > * { align-self: flex-start !important; justify-self: flex-start !important }
+  /* hero 頁的 quote/center 容器：移除 justify-center 留出的上方空白 */
+  .frame.center, .frame.hero-center { justify-content: flex-start !important }
 }
 
 </style></head><body>
