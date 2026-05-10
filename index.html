@@ -81,6 +81,11 @@ html.mobile-reader.overlay-shown .deck-mobile-overlay { display: flex }
 .deck-mobile-overlay .o-btn-secondary { background: transparent; color: rgba(241,239,234,.75); border: 1px solid rgba(241,239,234,.32) }
 .deck-mobile-overlay .o-btn-secondary:active { background: rgba(255,255,255,.08) }
 .deck-mobile-overlay .o-foot { font-family: var(--mono, monospace); font-size: 10px; letter-spacing: .2em; text-transform: uppercase; opacity: .35; margin-top: auto; padding-top: 4vh }
+
+/* chrome-link mobile 位置統一 — 永遠新行對齊右、不隨 page-number 長度漂移 */
+html.mobile-reader .chrome { display: flex !important; flex-direction: column !important; align-items: stretch !important; gap: 4px !important }
+html.mobile-reader .chrome > div { display: flex !important; align-items: center !important; flex-wrap: wrap !important; gap: 6px 12px !important }
+html.mobile-reader .chrome-link { margin-left: 0 !important; align-self: flex-start; flex-shrink: 0 }
 </style></head><body>
 <header class="topbar"><a class="logo" href="./">弄一下工作室</a><span class="spacer"></span><span>生成式 AI 工作應用班 36hr · 講師簡報集</span></header>
 <section class="hero"><div class="kicker">A Magazine of Lectures · 2026</div><h1>生成式 AI<br><em>工作應用班 36hr</em></h1><div class="sub">36hr · 7 Parts · 184 頁橫向翻頁簡報</div></section>

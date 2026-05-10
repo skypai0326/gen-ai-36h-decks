@@ -636,6 +636,11 @@ html.mobile-reader.overlay-shown .deck-mobile-overlay { display: flex }
 .deck-mobile-overlay .o-btn-secondary { background: transparent; color: rgba(241,239,234,.75); border: 1px solid rgba(241,239,234,.32) }
 .deck-mobile-overlay .o-btn-secondary:active { background: rgba(255,255,255,.08) }
 .deck-mobile-overlay .o-foot { font-family: var(--mono, monospace); font-size: 10px; letter-spacing: .2em; text-transform: uppercase; opacity: .35; margin-top: auto; padding-top: 4vh }
+
+/* chrome-link mobile 位置統一 — 永遠新行對齊右、不隨 page-number 長度漂移 */
+html.mobile-reader .chrome { display: flex !important; flex-direction: column !important; align-items: stretch !important; gap: 4px !important }
+html.mobile-reader .chrome > div { display: flex !important; align-items: center !important; flex-wrap: wrap !important; gap: 6px 12px !important }
+html.mobile-reader .chrome-link { margin-left: 0 !important; align-self: flex-start; flex-shrink: 0 }
 </style>
 </head>
 <body>
@@ -1662,8 +1667,12 @@ if(motion){
 
     if(recipe === 'pipeline'){
       pipeStep = -1;
+      // 預設自閱模式：全顯。URL ?pipeline=1 才走講師 strict
+      var strict = new URL(location.href).searchParams.get('pipeline') === '1';
+      var op = strict ? '0.15' : '1';
+      if (strict) document.body.classList.add('pipeline-strict');
       slide.querySelectorAll('[data-anim]').forEach(el=>{
-        el.style.opacity='0.15';
+        el.style.opacity=op;
         el.style.transform='none';
       });
       return;
