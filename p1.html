@@ -237,9 +237,9 @@
   .frame.grid-6{display:grid}
 
   /* ---------- 标题层级（API 名称，衬线为主） ---------- */
-  /* 主標題下方呼吸 — 補 skill 設計缺口（h-hero/h-xl 原本無 margin-bottom，與 lead 直接黏） */
-  .h-hero, .h-xl, .display, .display-zh, .h1-zh, .h2-zh { margin-bottom: 2.6vh }
-  .lead + .meta-row, .lead + .body-zh { margin-top: 1.4vh }
+  /* 主標題下方呼吸 — 補 skill 結構缺口
+     精準化：只在「標題後緊接文字」加 margin，標題後接 callout/grid/pipeline 不加（避免 push overflow） */
+  :where(.h-hero, .h-xl, .display, .display-zh, .h1-zh, .h2-zh) + :where(.lead, .meta-row, .body-zh, .body-serif, p) { margin-top: 1.6vh }
   .h-hero{
     font-family:var(--serif-zh);
     font-weight:900;
