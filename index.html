@@ -49,6 +49,10 @@ html.mobile-reader canvas.bg { display: none !important }
 html.mobile-reader #portrait-hint { display: none !important }
 html.mobile-reader #nav, html.mobile-reader #hint, html.mobile-reader .dots, html.mobile-reader #dots, html.mobile-reader .index-toggle { display: none !important }
 html.mobile-reader::before { content: "✱ 手機閱讀模式 · 向下捲動瀏覽全部頁面"; display: block; position: sticky; top: 0; z-index: 100; padding: 8px 4vw; background: rgba(0,0,0,.85); color: #fff; font-family: var(--mono); font-size: 11px; letter-spacing: .14em; text-align: center; opacity: .92 }
+html.mobile-reader [style*="grid-template-columns:repeat(2,1fr)"], html.mobile-reader [style*="grid-template-columns: repeat(2,1fr)"], html.mobile-reader [style*="grid-template-columns:repeat(3,1fr)"], html.mobile-reader [style*="grid-template-columns:repeat(4,1fr)"] { grid-template-columns: 1fr !important }
+html.mobile-reader .frame[style*="padding-top"] { padding-top: 0 !important }
+html.mobile-reader .frame[style*="min-height"] { min-height: 0 !important }
+html.mobile-reader { padding-bottom: 12vh }
 html.mobile-reader .reader-toggle { position: fixed; bottom: 1vh; right: 2vw; z-index: 1000; font-family: var(--mono); font-size: 11px; padding: 6px 12px; background: rgba(127,127,127,.15); border: 1px solid currentColor; border-radius: 99px; opacity: .65; cursor: pointer; letter-spacing: .14em; text-transform: uppercase; color: inherit; text-decoration: none }
 html.mobile-reader .reader-toggle:hover { opacity: 1 }
 .reader-toggle { display: none }
